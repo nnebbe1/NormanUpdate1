@@ -34,6 +34,7 @@ public class PersonScript : MonoBehaviour
     private Transform position_Player;
 
     Vector3 direction = new Vector3(-257.9f, 43.7f, -13.2f);
+    Rigidbody player_rigidbody;
 
     // Start is called before the first frame update
     void Start()
@@ -41,21 +42,17 @@ public class PersonScript : MonoBehaviour
         
         //START POSITION
         transform.position = direction;
-
+        player_rigidbody = GetComponent<Rigidbody>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        //Get and store horizontal and vertical movement directions
-        //float horizontal = Input.GetAxisRaw("Horizontal");
-       // float vertical = Input.GetAxisRaw("Vertical");
-        //Vector3 movement = new Vector3(horizontal, 0f, vertical);
 
         Vector3 movement = (position_Player.position - position_Cam.position) / 30;
         movement.y = 0;
         Vector3 movement_right = new Vector3(-movement.z, 0f, movement.x);
         Vector3 movement_left = new Vector3(movement.z, 0f, -movement.x);
-       
+
 
         //updated direction vector
         Vector3 movementRotated = Quaternion.AngleAxis(cam.transform.eulerAngles.y, Vector3.up) * movement;
@@ -64,22 +61,40 @@ public class PersonScript : MonoBehaviour
         if (Input.GetAxisRaw("Vertical") > 0)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movementRotated.normalized), 0.1f);
-            transform.Translate(movement * _speed * Time.deltaTime, Space.World);
-        } else if (Input.GetAxisRaw("Vertical") < 0)
+            player_rigidbody.AddForce((movement * _speed * Time.deltaTime)*50);
+        }
+        
+        if (Input.GetAxisRaw("Vertical") < 0)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movementRotated.normalized), 0.1f);
-            transform.Translate((-1)*(movement * _speed * Time.deltaTime), Space.World);
-        }else if (Input.GetAxisRaw("Horizontal") < 0)
+            player_rigidbody.AddForce((-1)*(movement * _speed * Time.deltaTime)*50);
+        }
+
+        if (Input.GetAxisRaw("Horizontal") < 0)
         {
             Debug.Log("horizontal <0");
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movementRotated.normalized), 0.1f);
-            transform.Translate((movement_right * _speed * Time.deltaTime), Space.World);
-        }else if (Input.GetAxisRaw("Horizontal") > 0)
+            player_rigidbody.AddForce((movement_right * _speed * Time.deltaTime)*50);
+        }
+
+        if (Input.GetAxisRaw("Horizontal") > 0)
         {
             Debug.Log("horizontal >0");
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movementRotated.normalized), 0.1f);
-            transform.Translate((movement_left * _speed * Time.deltaTime), Space.World);
+            player_rigidbody.AddForce((movement_left * _speed * Time.deltaTime)*50);
+
         }
+
+        if(Input.GetKeyDown("space"))
+        {
+            player_rigidbody.AddForce(0f,1000f,0f);
+        }
+
+        // this code simulates air resistance: slowing down when no input is pressed
+        var direction = -player_rigidbody.velocity.normalized;
+        var forceAmount = (player_rigidbody.velocity.magnitude);
+        var air_resistance = new Vector3(direction.x * forceAmount, 0f, direction.z * forceAmount);
+        player_rigidbody.AddForce(air_resistance);
         }
 
 
