@@ -19,7 +19,7 @@ public class PersonScript : MonoBehaviour
     private SoundManager soundManager;
 
     [SerializeField]
-    private UI_Manager uiManager;
+    private GameManager gameManager;
 
 
     // -- time delay --
@@ -47,8 +47,6 @@ public class PersonScript : MonoBehaviour
 
     void Start()
     {
-        
-        //START POSITION
         transform.position = direction;
         player_rigidbody = GetComponent<Rigidbody>();
         hasUmbrella = false;
@@ -119,21 +117,21 @@ public class PersonScript : MonoBehaviour
         
         if (other.CompareTag("onion"))
         {
-            uiManager.show_onion_prompt();
+            gameManager.show_onion_prompt();
 
         }
 
-        if (other.CompareTag("Rain"))
+        if (other.CompareTag("rain"))
         {
-            uiManager.looseHealth();
+            gameManager.looseHealth();
             soundManager.playSound("rain");
 
         }
 
-        if (other.CompareTag("Ketchup"))
+        if (other.CompareTag("ketchup"))
         {
-            uiManager.looseHealth();
-            uiManager.k_splash();
+            gameManager.looseHealth();
+            gameManager.k_splash();
             soundManager.playSound("damage");
 
             //SoundManager damage sound
@@ -141,32 +139,33 @@ public class PersonScript : MonoBehaviour
 
         if (other.CompareTag("garlic"))
         {
-            uiManager.show_press_e_prompt();
+            gameManager.show_press_e_prompt();
+            Debug.Log("garlic");
         }
 
         if (other.CompareTag("mushroom"))
         {
-            uiManager.show_press_e_prompt();
+            gameManager.show_press_e_prompt();
         }
 
         if (other.CompareTag("yogurt"))
         {
-            uiManager.show_press_e_prompt();
+            gameManager.show_press_e_prompt();
         }
 
         if (other.CompareTag("tomato"))
         {
-            uiManager.show_press_e_prompt();
+            gameManager.show_press_e_prompt();
         }
 
         if (other.CompareTag("pot"))
         {
-            uiManager.show_press_e_prompt();
+            gameManager.show_press_e_prompt();
         }
 
         if (other.CompareTag("umbrella"))
         {
-            uiManager.show_press_e_prompt();
+            gameManager.show_press_e_prompt();
         }
 
     }
@@ -183,7 +182,7 @@ public class PersonScript : MonoBehaviour
          if (other.CompareTag("garlic"))
         {
             if (Input.GetKey(KeyCode.E)){
-                uiManager.ingredienceUI(other.tag);
+                gameManager.pickup_item(other.tag);
                 soundManager.playSound("collect");
             }
         }
@@ -191,7 +190,7 @@ public class PersonScript : MonoBehaviour
         if (other.CompareTag("mushroom"))
         {
            if (Input.GetKey(KeyCode.E)){
-                uiManager.ingredienceUI(other.tag);
+                gameManager.pickup_item(other.tag);
                 soundManager.playSound("collect");
             } 
         }
@@ -199,7 +198,7 @@ public class PersonScript : MonoBehaviour
         if (other.CompareTag("yogurt"))
         {
            if (Input.GetKey(KeyCode.E)){
-                uiManager.ingredienceUI(other.tag);
+                gameManager.pickup_item(other.tag);
                 soundManager.playSound("collect");
             } 
         }
@@ -207,7 +206,7 @@ public class PersonScript : MonoBehaviour
         if (other.CompareTag("tomato"))
         {
             if (Input.GetKey(KeyCode.E)){
-                uiManager.ingredienceUI(other.tag);
+                gameManager.pickup_item(other.tag);
                 soundManager.playSound("collect");
             }
         }
@@ -215,6 +214,7 @@ public class PersonScript : MonoBehaviour
         if (other.CompareTag("umbrella"))
         {
             if (Input.GetKey(KeyCode.E)){
+                gameManager.pickup_item(other.tag);
                 soundManager.playSound("collect");
                 hasUmbrella = true;
             }
@@ -234,10 +234,10 @@ public class PersonScript : MonoBehaviour
 
         if (other.CompareTag("onion"))
         {
-            uiManager.hide_onion_prompt();
-        }else if (other.CompareTag("tomate") || other.CompareTag("garlic") || other.CompareTag("mushroom") || other.CompareTag("yogurt") || other.CompareTag("pot"))
+            gameManager.hide_onion_prompt();
+        }else if (other.CompareTag("tomato") || other.CompareTag("garlic") || other.CompareTag("mushroom") || other.CompareTag("yogurt") || other.CompareTag("pot"))
         {
-            uiManager.hide_press_e_prompt();
+            gameManager.hide_press_e_prompt();
         }else if (other.CompareTag("rain")){
             soundManager.playSound("background");
 
