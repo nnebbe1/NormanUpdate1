@@ -10,7 +10,20 @@ public class SoundManager : MonoBehaviour
     private AudioSource backgroundSource;
 
     [SerializeField]
-    private AudioClip damageClip, collectClip, jumpClip, rainClip, backgroundClip;
+    private AudioClip damageClip;
+
+    [SerializeField]
+    private AudioClip collectClip;
+
+    [SerializeField]
+    private AudioClip jumpClip;
+
+    [SerializeField]
+    private AudioClip rainClip;
+
+    [SerializeField]
+    private AudioClip backgroundClip;
+
     void Start()
     {
         backgroundSource.clip = backgroundClip;

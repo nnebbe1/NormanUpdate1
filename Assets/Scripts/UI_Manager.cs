@@ -10,15 +10,10 @@ public class UI_Manager : MonoBehaviour
     public TMP_Text ingrediences;
     private int[] foundObjects = { 4, 5, 6, 7 };
     public TMP_Text ketchup_splash;
-    public TMP_Text press_e_tmp;
+    public TMP_Text press_e_interact;
 
-    void Awake()
-    {
-        Debug.Log("awake");
-        StartCoroutine(k_splash());
-        show_press_e();
+    public TMP_Text onion_prompt;
 
-    }
 
     public void looseHealth()
     {
@@ -64,7 +59,7 @@ public class UI_Manager : MonoBehaviour
     }
 
 
-    private IEnumerator k_splash()
+    public IEnumerator k_splash()
     {
         Debug.Log("k_splash");
         ketchup_splash.text = "<sprite=0>";
@@ -72,25 +67,25 @@ public class UI_Manager : MonoBehaviour
         ketchup_splash.text = "";
     }
 
-    private void show_onion_prompt()
+    public void show_onion_prompt()
     {
         onion_prompt.text = "Press 'E' to talk to the onion";
     }
 
-    private void hide_onion_prompt()
+    public  void hide_onion_prompt()
     {
         onion_prompt.text = "";
     }
 
 
-    private void show_press_e_prompt()
+    public  void show_press_e_prompt()
     {
         Debug.Log("show_press_E");
-        press_e_tmp.text = "Press 'E' to interact";
+        press_e_interact.text = "Press 'E' to interact";
     }
-    private void hide_press_e_prompt()
+    public  void hide_press_e_prompt()
     {
         Debug.Log("hide_press_E");
-        press_e_tmp.text = "";
+        press_e_interact.text = "";
     }
 }
