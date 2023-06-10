@@ -238,6 +238,7 @@ public class PersonScript : MonoBehaviour
         }else if (other.CompareTag("tomato") || other.CompareTag("garlic") || other.CompareTag("mushroom") || other.CompareTag("yogurt") || other.CompareTag("pot"))
         {
             gameManager.hide_press_e_prompt();
+            
         }else if (other.CompareTag("rain")){
             soundManager.playSound("background");
 
