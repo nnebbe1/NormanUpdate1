@@ -13,6 +13,7 @@ TagManager:
   - ketchup
   - rain
   - umbrella
+  - sauce
   layers:
   - Default
   - TransparentFX

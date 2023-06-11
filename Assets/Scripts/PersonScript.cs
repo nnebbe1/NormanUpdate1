@@ -11,8 +11,7 @@ public class PersonScript : MonoBehaviour
 
     [SerializeField]
     private GameManager _gameManager;
-    [SerializeField]
-    private Animator _animator; 
+    private Animator _animator;
 
     // Variables of the player
 
@@ -30,9 +29,10 @@ public class PersonScript : MonoBehaviour
     private Transform _positionPlayer;
     private Rigidbody _playerRigidbody;
     private bool _hasUmbrella;
-    
+    private int _lives = 3;
+
     private Vector3 _startPosition = new Vector3(-257.9f, 43.7f, -13.2f);
- 
+
 
     //Variables used for the camera movement
 
@@ -42,6 +42,11 @@ public class PersonScript : MonoBehaviour
 
     [SerializeField]
     private Transform _positionCam;
+
+    // Siracha sauce
+    [SerializeField]
+    private GameObject _sauce;
+
 
     // Player Set up
     void Start()
@@ -61,29 +66,29 @@ public class PersonScript : MonoBehaviour
         Vector3 movementLeft = new Vector3(movement.z, 0f, -movement.x);
 
         float targetAngel = Mathf.Atan2(movement.x, movement.z) * Mathf.Rad2Deg;
-        _playerRigidbody.AddForce(0,-_extraGravity,0);
-    
+        _playerRigidbody.AddForce(0, -_extraGravity, 0);
+
         // Forward and backward movement
         if (Input.GetAxisRaw("Vertical") > 0)
         {
-            _playerRigidbody.AddForce((movement * _speed * Time.deltaTime)*50);
+            _playerRigidbody.AddForce((movement * _speed * Time.deltaTime) * 50);
             transform.rotation = Quaternion.Euler(0f, targetAngel, 0f);
         }
-        
+
         if (Input.GetAxisRaw("Vertical") < 0)
         {
-            _playerRigidbody.AddForce((-1)*(movement * _speed * Time.deltaTime)*50);
+            _playerRigidbody.AddForce((-1) * (movement * _speed * Time.deltaTime) * 50);
         }
 
         // Left and Right movement
         if (Input.GetAxisRaw("Horizontal") < 0)
         {
-            _playerRigidbody.AddForce((movementRight * _speed * Time.deltaTime)*50);
+            _playerRigidbody.AddForce((movementRight * _speed * Time.deltaTime) * 50);
         }
 
         if (Input.GetAxisRaw("Horizontal") > 0)
         {
-            _playerRigidbody.AddForce((movementLeft * _speed * Time.deltaTime)*50);
+            _playerRigidbody.AddForce((movementLeft * _speed * Time.deltaTime) * 50);
 
         }
         //Jumping and jump animation
@@ -93,7 +98,8 @@ public class PersonScript : MonoBehaviour
             _nextJumpTime = Time.time + _coolDownTime;
             _animator.SetBool("toJump", true);
         }
-        if(_nextJumpTime <  Time.time){
+        if (_nextJumpTime < Time.time)
+        {
             _animator.SetBool("toJump", false);
         }
 
@@ -118,18 +124,23 @@ public class PersonScript : MonoBehaviour
 
         if (other.CompareTag("rain"))
         {
-            _gameManager.looseHealth();
             _soundManager.playSound("rain");
+            // player gets killed by mayo-rain without umbrella
+            if (!_hasUmbrella)
+            {
+                this.Damage(0);
+            }
 
         }
 
         if (other.CompareTag("ketchup"))
         {
-            _gameManager.looseHealth();
+            this.Damage(1);
             _gameManager.k_splash();
             _soundManager.playSound("damage");
 
-        }else if (other.CompareTag("tomato") || other.CompareTag("garlic") || other.CompareTag("mushroom") || other.CompareTag("yogurt") || other.CompareTag("pot") || other.CompareTag("umbrella"))
+        }
+        else if (other.CompareTag("tomato") || other.CompareTag("garlic") || other.CompareTag("mushroom") || other.CompareTag("yogurt") || other.CompareTag("pot") || other.CompareTag("umbrella"))
         {
             _gameManager.show_press_e_prompt();
         }
@@ -138,18 +149,21 @@ public class PersonScript : MonoBehaviour
 
     // Interactions between player an interactables during collision
     // Pick up of ingrediences, talk to onion, cook at cooking pot
-    private void OnTriggerStay(Collider other){
-        
+    private void OnTriggerStay(Collider other)
+    {
+
         if (other.CompareTag("onion"))
         {
-            if (Input.GetKey(KeyCode.E)){
+            if (Input.GetKey(KeyCode.E))
+            {
                 _gameManager.onionTalk();
             }
 
         }
-         if (other.CompareTag("garlic"))
+        if (other.CompareTag("garlic"))
         {
-            if (Input.GetKey(KeyCode.E)){
+            if (Input.GetKey(KeyCode.E))
+            {
                 _gameManager.pickup_item(other.tag);
                 _soundManager.playSound("collect");
             }
@@ -157,23 +171,26 @@ public class PersonScript : MonoBehaviour
 
         if (other.CompareTag("mushroom"))
         {
-           if (Input.GetKey(KeyCode.E)){
+            if (Input.GetKey(KeyCode.E))
+            {
                 _gameManager.pickup_item(other.tag);
                 _soundManager.playSound("collect");
-            } 
+            }
         }
 
         if (other.CompareTag("yogurt"))
         {
-           if (Input.GetKey(KeyCode.E)){
+            if (Input.GetKey(KeyCode.E))
+            {
                 _gameManager.pickup_item(other.tag);
                 _soundManager.playSound("collect");
-            } 
+            }
         }
 
         if (other.CompareTag("tomato"))
         {
-            if (Input.GetKey(KeyCode.E)){
+            if (Input.GetKey(KeyCode.E))
+            {
                 _gameManager.pickup_item(other.tag);
                 _soundManager.playSound("collect");
             }
@@ -181,7 +198,8 @@ public class PersonScript : MonoBehaviour
 
         if (other.CompareTag("umbrella"))
         {
-            if (Input.GetKey(KeyCode.E)){
+            if (Input.GetKey(KeyCode.E))
+            {
                 _gameManager.pickup_item(other.tag);
                 _soundManager.playSound("collect");
                 _hasUmbrella = true;
@@ -190,9 +208,23 @@ public class PersonScript : MonoBehaviour
 
         if (other.CompareTag("pot"))
         {
-           if (Input.GetKey(KeyCode.E)){
-                // if all ingredience collected...
-            } 
+
+            if (Input.GetKey(KeyCode.E))   
+            {
+                if (_gameManager.GetIngrediants())
+                {
+                    // When the game is won the bird spins and the sauce appears in the pot
+                    _animator.SetBool("isWon", true);
+                    _sauce.GetComponent<MeshRenderer>().enabled = true;
+                    
+
+                }
+                else
+                {
+                    Debug.Log("not all ingredients there yet");
+                    _gameManager.not_finished_prompt();
+                }
+            }
         }
 
 
@@ -200,20 +232,46 @@ public class PersonScript : MonoBehaviour
 
     // Interactions between player an interactables when collision ends
     // Hide UI prompts
-    private void OnTriggerExit(Collider other){
+    private void OnTriggerExit(Collider other)
+    {
 
         if (other.CompareTag("onion"))
         {
             _gameManager.hide_onion_prompt();
-        }else if (other.CompareTag("tomato") || other.CompareTag("garlic") || other.CompareTag("mushroom") || other.CompareTag("yogurt") || other.CompareTag("pot") || other.CompareTag("umbrella"))
+        }
+        else if (other.CompareTag("tomato") || other.CompareTag("garlic") || other.CompareTag("mushroom") || other.CompareTag("yogurt") || other.CompareTag("pot") || other.CompareTag("umbrella"))
         {
             _gameManager.hide_press_e_prompt();
-            
-        }else if (other.CompareTag("rain")){
+
+        }
+        else if (other.CompareTag("rain"))
+        {
             _soundManager.playSound("background");
 
         }
 
     }
-}
 
+    public void Damage(int type_enemy)
+    {
+        // mayo-rain leads to death right away
+        if(type_enemy == 0)
+        {
+            _lives = 0;
+            _gameManager.looseHealth(_lives);
+        }
+        // Ketchup uses lives consecutively 
+        else
+        {
+            _lives--;
+            _gameManager.looseHealth(_lives);
+        }
+        if (_lives == 0)
+        {
+            _animator.SetBool("isDead", true);
+
+
+        }
+
+    }
+}

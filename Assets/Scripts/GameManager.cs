@@ -8,10 +8,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public TMP_Text health;
     public TMP_Text ingrediences;
-    private int[] foundObjects = { 4, 5, 6, 7 };
+    private int[] _foundObjects = { 4, 5, 6, 7 };
     public TMP_Text ketchup_splash;
     public TMP_Text press_e_interact;
     public TMP_Text onion_prompt;
+
 
     [SerializeField]
     private PersonScript player;
@@ -31,65 +32,80 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject umbrella;
 
-    private bool hasAllIngredience = false; 
-    private bool hasUmbrella = false;
+    [SerializeField]
+    public bool _hasAllIngredience = false; 
+
+    private bool _hasUmbrella = false;
 
     private GameManager instance;
 
-    void start(){
+    private Animator _animator;
+
+    void Start(){
+
+        _animator = GetComponent<Animator>();
 
     }
 
-    public void looseHealth()
+    public void looseHealth(int lives)
     {
-        if (health.text == "<sprite=0><sprite=1><sprite=2>")
+        if(lives == 2)
         {
             health.text = "<sprite=0><sprite=1>";
         }
-        else if (health.text == "<sprite=0><sprite=1>")
+        else if (lives == 1)
         {
             health.text = "<sprite=0>";
         }
+        else if (lives == 0)
+        {
+            health.text = "!!Game Over!!";
+        }
+
     }
 
-    public void pickup_item(string item)
+public void pickup_item(string item)
     {
 
         if (item == "tomato")
         {
-            foundObjects[0] = 0;
+            _foundObjects[0] = 0;
             Destroy(tomato);
             hide_press_e_prompt();
         }else if (item == "garlic")
         {
-            foundObjects[1] = 1;
+            _foundObjects[1] = 1;
             Destroy(garlic);
             hide_press_e_prompt();
         }else if (item == "mushroom")
         {
-            foundObjects[2] = 2;
+            _foundObjects[2] = 2;
             Destroy(mushroom);
             hide_press_e_prompt();
         }else if (item == "yogurt")
         {
-            foundObjects[3] = 3;
+            _foundObjects[3] = 3;
             Destroy(yogurt);
             hide_press_e_prompt();
         }else if (item == "umbrella"){
-            hasUmbrella = true;
+            _hasUmbrella = true;
             umbrella.transform.position = player.transform.position;
             umbrella.transform.parent = player.transform;
             hide_press_e_prompt();
         }
 
-        ingrediences.text = ("<sprite=" + foundObjects[0] + "><sprite=" + foundObjects[1] + "><sprite=" + foundObjects[2] + "><sprite=" + foundObjects[3] + ">");
+        ingrediences.text = ("<sprite=" + _foundObjects[0] + "><sprite=" + _foundObjects[1] + "><sprite=" + _foundObjects[2] + "><sprite=" + _foundObjects[3] + ">");
 
-        if ((foundObjects[0] == 0) && (foundObjects[1] == 1) && (foundObjects[2] == 2) && (foundObjects[3] == 3))
+        Debug.Log(_foundObjects[0]);
+        Debug.Log(_foundObjects[1]);
+        Debug.Log(_foundObjects[2]);
+        Debug.Log(_foundObjects[3]);
+        if ((_foundObjects[0] == 0) && (_foundObjects[1] == 1) && (_foundObjects[2] == 2) && (_foundObjects[3] == 3))
         {
-            hasAllIngredience = true;
+            Debug.Log(_hasAllIngredience);
+            _hasAllIngredience = true;
         }
     }
-
 
     public IEnumerator k_splash()
     {
@@ -121,5 +137,22 @@ public class GameManager : MonoBehaviour
     public void hide_press_e_prompt()
     {
         press_e_interact.text = "";
+    }
+
+    public void not_finished_prompt()
+    {
+        press_e_interact.text = "You don't have all the ingredients for Siracha sauce yet, keep searching!";
+    }
+
+    public bool GetIngrediants()
+    {
+        if(_hasAllIngredience == true)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
