@@ -9,7 +9,6 @@
 ## Hints on how to play:
 
 ### Game story/background:
-**Sriracha-Quest**
 
 ***(This text will be read out to you in the start scene, so the player gets an idea of the game setting/ background of the quest.)***
 
@@ -34,9 +33,7 @@ One brave bird solider simply does not accept this new reality. Determined to br
 ### Enemies
 - your enemies are ketchup and mayo, as they don't want the Siracha-sauce to have a come back
 - The ketchup-landmines make you loose a life when touching them 
-- they randomly move around within a certain area **(NORMAN NEEDS TO ADD EXPLANATION)**
-- The acidic mayo rain basically kills you right away. Every rain drop makes you loose a life, so to get the mushroom it is necessary to collect the umbrella. 
-- The rain is an "effect"-object that is randomly spawn over the area of the hill in an ongoing loop. 
+- The acidic mayo rain basically kills you right away. Every rain drop makes you loose a life, so to get the mushroom it is necessary to collect the umbrella first. 
 
 ### Gameover/ winning
 - the game is won when the player has collected all items and placed them into the pot in the middle of the island 
@@ -48,7 +45,7 @@ One brave bird solider simply does not accept this new reality. Determined to br
 
 **Player**
 - moves in all directions of 3D space (including jumping) 
-- Always aligns rotation with camera direction, set by mouse
+- Always aligns rotation with camera direction, that is set by mouse
 
 **Animations**
 - player transitions between different animations: 
@@ -59,18 +56,28 @@ One brave bird solider simply does not accept this new reality. Determined to br
 
 **Rain**
 - rain is an "effect"-object that is randomly spawned over the area of the hill in an ongoing loop. 
+- Is the parent to the ripple particle "effect"-objects that appear when rain hits the surface of something and gets destroyed.
 
 **Collecting Items**
-
-**Life count**
+- Items can be collected in the area of it by pressing "e". 
+- It then gets destroyed 
 
 **Ketchup army**
+- they randomly move around within a certain area **(NORMAN NEEDS TO ADD EXPLANATION)**
 
-**UI Manager**
+**User Interface**
+- In the top-left corner is a life-counter in form of red hearts, that turn grey when loosing a life. 
+- In the top right corner are the Items that need to be collected, which turn colorful after collection.
+- There appears text giving hints on how to proceed in the game in the area of certain objects.
 
 **Sound effects**
+**(NORMAN NEEDS TO ADD EXPLANATION)**
 
 **Scene switching** 
+- there are three different scences
+- start screen where you can start the game
+- the game scene 
+- The end scene (victory or game over) 
 
 
 
