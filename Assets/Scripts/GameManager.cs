@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,28 +32,49 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject umbrella;
 
-    private bool hasAllIngredience = false; 
-    private bool hasUmbrella = false;
+    private bool _hasAllIngrediences = false; 
+    private bool _hasUmbrella = false;
 
     private GameManager instance;
 
-    void start(){
+    [SerializeField]
+    private SoundManager _soundManager;
+
+    private Animator _animator;
+
+    void Start(){
+
+        _animator = GetComponent<Animator>();
 
     }
 
-    public void looseHealth()
+    public IEnumerator looseHealth(int lives)
     {
-        if (health.text == "<sprite=0><sprite=1><sprite=2>")
+        Debug.Log("looseHealthhh");
+        if(lives == 2)
         {
             health.text = "<sprite=0><sprite=1>";
-        }
-        else if (health.text == "<sprite=0><sprite=1>")
+        }else if (lives == 1)
         {
             health.text = "<sprite=0>";
+        }else if (lives == 0)
+        {
+            health.text = "!!Game Over!!";
+            yield return new WaitForSeconds(5);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
         }
+
     }
 
-    public void pickup_item(string item)
+    public IEnumerator winGame(){
+
+        press_e_interact.text = "The world is safed!";
+        _soundManager.playSound("winning");
+        yield return new WaitForSeconds(5);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1); 
+    }
+
+public void pickup_item(string item)
     {
 
         if (item == "tomato")
@@ -76,7 +98,7 @@ public class GameManager : MonoBehaviour
             Destroy(yogurt);
             hide_press_e_prompt();
         }else if (item == "umbrella"){
-            hasUmbrella = true;
+            _hasUmbrella = true;
             umbrella.transform.position = player.transform.position;
             umbrella.transform.parent = player.transform;
             hide_press_e_prompt();
@@ -86,7 +108,7 @@ public class GameManager : MonoBehaviour
 
         if ((foundObjects[0] == 0) && (foundObjects[1] == 1) && (foundObjects[2] == 2) && (foundObjects[3] == 3))
         {
-            hasAllIngredience = true;
+            _hasAllIngrediences = true;
         }
     }
 
@@ -95,7 +117,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("k_splash");
         ketchup_splash.text = "<sprite=0>";
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(3);
         ketchup_splash.text = "";
     }
 
@@ -121,5 +143,9 @@ public class GameManager : MonoBehaviour
     public void hide_press_e_prompt()
     {
         press_e_interact.text = "";
+    }
+
+    public bool getAllIngrediences(){
+        return _hasAllIngrediences;
     }
 }

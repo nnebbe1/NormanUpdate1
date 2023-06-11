@@ -18,13 +18,17 @@ public class SoundManager : MonoBehaviour
     [SerializeField]
     private AudioClip jumpClip;
     [SerializeField]
-    private AudioClip onionClip;
+    private AudioClip winningClip;
 
     [SerializeField]
     private AudioClip rainClip;
 
     [SerializeField]
     private AudioClip backgroundClip;
+
+    [SerializeField]
+    private AudioClip gameoverClip;
+
 
     void Start()
     {
@@ -48,9 +52,10 @@ public class SoundManager : MonoBehaviour
         {
             clipsSource.PlayOneShot(collectClip);
         }
-        else if (clipName == "onion")
+        else if (clipName == "gameover")
         {
-            clipsSource.PlayOneShot(onionClip);
+            clipsSource.clip = gameoverClip;
+            clipsSource.Play();
         }
         else if (clipName == "rain")
         {
@@ -63,6 +68,10 @@ public class SoundManager : MonoBehaviour
             backgroundSource.clip = backgroundClip;
             backgroundSource.loop = true;
             backgroundSource.Play();
+        }else if (clipName == "winning")
+        {
+            clipsSource.clip = winningClip;
+            clipsSource.Play();
         }
 
     }
