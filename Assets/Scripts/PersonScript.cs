@@ -79,7 +79,7 @@ public class PersonScript : MonoBehaviour
 
         if (Input.GetAxisRaw("Vertical") < 0)
         {   
-            StartCoroutine(_gameManager.winGame());
+            Damage(0);
             _playerRigidbody.AddForce((-1) * (movement * _speed * Time.deltaTime) * 50);
         }
 
@@ -219,6 +219,7 @@ public class PersonScript : MonoBehaviour
                     // When the game is won the bird spins and the sauce appears in the pot
                     _animator.SetBool("isWon", true);
                     _sauce.GetComponent<MeshRenderer>().enabled = true;
+                    StartCoroutine(_gameManager.winGame());
                     
 
                 }

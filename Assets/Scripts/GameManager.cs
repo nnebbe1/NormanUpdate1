@@ -156,7 +156,7 @@ public void pickup_item(string item)
 
     public bool GetIngrediants()
     {
-        if(_hasAllIngredience == true)
+        if(_hasAllIngrediences == true)
         {
             return true;
         }
