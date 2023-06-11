@@ -22,6 +22,11 @@ public class PersonScript : MonoBehaviour
     private GameManager gameManager;
 
 
+    // for the Animation transitions
+    private Animator _animator; 
+
+
+
     // -- time delay --
     private float _coolDownTime = 2f;
     private float _nextJumpTime = 0f;
@@ -41,14 +46,14 @@ public class PersonScript : MonoBehaviour
 
     private Vector3 direction = new Vector3(-257.9f, 43.7f, -13.2f);
     private Rigidbody player_rigidbody;
-
-    private bool hasUmbrella; 
+ 
 
 
     void Start()
     {
         transform.position = direction;
         player_rigidbody = GetComponent<Rigidbody>();
+        _animator = GetComponent<Animator>();
         hasUmbrella = false;
     }
 
@@ -83,24 +88,29 @@ public class PersonScript : MonoBehaviour
 
         if (Input.GetAxisRaw("Horizontal") < 0)
         {
-            Debug.Log("horizontal <0");
+            
             //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movementRotated.normalized), 0.1f);
             player_rigidbody.AddForce((movement_right * _speed * Time.deltaTime)*50);
         }
 
         if (Input.GetAxisRaw("Horizontal") > 0)
         {
-            Debug.Log("horizontal >0");
+            
             //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movementRotated.normalized), 0.1f);
             player_rigidbody.AddForce((movement_left * _speed * Time.deltaTime)*50);
 
         }
         if (Input.GetKey("space") && _nextJumpTime < Time.time)
         {
-            Debug.Log("space");
             player_rigidbody.velocity = new Vector3(0f, _jumpingSpeed, 0f);
             Debug.Log(player_rigidbody.velocity);
             _nextJumpTime = Time.time + _coolDownTime;
+
+            _animator.SetBool("toJump", true);
+        }
+        if(_nextJumpTime <  Time.time){
+
+            _animator.SetBool("toJump", false);
         }
 
         

@@ -4,8 +4,15 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Onion
-  - CookingPot
+  - onion
+  - garlic
+  - pot
+  - mushroom
+  - tomato
+  - yogurt
+  - ketchup
+  - rain
+  - umbrella
   layers:
   - Default
   - TransparentFX

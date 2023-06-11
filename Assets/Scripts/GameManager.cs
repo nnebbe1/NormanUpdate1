@@ -14,17 +14,31 @@ public class GameManager : MonoBehaviour
     public TMP_Text onion_prompt;
 
     [SerializeField]
+    private PersonScript player;
+
+    [SerializeField]
     private GameObject garlic;
+
     [SerializeField]
     private GameObject tomato;
+
     [SerializeField]
     private GameObject mushroom;
+
     [SerializeField]
     private GameObject yogurt;
+
     [SerializeField]
     private GameObject umbrella;
 
     private bool hasAllIngredience = false; 
+    private bool hasUmbrella = false;
+
+    private GameManager instance;
+
+    void start(){
+
+    }
 
     public void looseHealth()
     {
@@ -45,21 +59,27 @@ public class GameManager : MonoBehaviour
         {
             foundObjects[0] = 0;
             Destroy(tomato);
-        }
-        if (item == "garlic")
+            hide_press_e_prompt();
+        }else if (item == "garlic")
         {
             foundObjects[1] = 1;
             Destroy(garlic);
-        }
-        if (item == "mushroom")
+            hide_press_e_prompt();
+        }else if (item == "mushroom")
         {
             foundObjects[2] = 2;
             Destroy(mushroom);
-        }
-        if (item == "yogurt")
+            hide_press_e_prompt();
+        }else if (item == "yogurt")
         {
             foundObjects[3] = 3;
             Destroy(yogurt);
+            hide_press_e_prompt();
+        }else if (item == "umbrella"){
+            hasUmbrella = true;
+            umbrella.transform.position = player.transform.position;
+            umbrella.transform.parent = player.transform;
+            hide_press_e_prompt();
         }
 
         ingrediences.text = ("<sprite=" + foundObjects[0] + "><sprite=" + foundObjects[1] + "><sprite=" + foundObjects[2] + "><sprite=" + foundObjects[3] + ">");
@@ -84,20 +104,18 @@ public class GameManager : MonoBehaviour
         onion_prompt.text = "Press 'E' to talk to the onion";
     }
 
-    public  void hide_onion_prompt()
+    public void hide_onion_prompt()
     {
         onion_prompt.text = "";
     }
 
 
-    public  void show_press_e_prompt()
+    public void show_press_e_prompt()
     {
-        Debug.Log("show_press_E");
         press_e_interact.text = "Press 'E' to interact";
     }
-    public  void hide_press_e_prompt()
+    public void hide_press_e_prompt()
     {
-        Debug.Log("hide_press_E");
         press_e_interact.text = "";
     }
 }
