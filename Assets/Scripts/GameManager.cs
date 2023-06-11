@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,12 +33,13 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject umbrella;
 
-    [SerializeField]
-    public bool _hasAllIngredience = false; 
-
+    private bool _hasAllIngrediences = false; 
     private bool _hasUmbrella = false;
 
     private GameManager instance;
+
+    [SerializeField]
+    private SoundManager _soundManager;
 
     private Animator _animator;
 
@@ -47,21 +49,30 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void looseHealth(int lives)
+    public IEnumerator looseHealth(int lives)
     {
+        Debug.Log("looseHealthhh");
         if(lives == 2)
         {
             health.text = "<sprite=0><sprite=1>";
-        }
-        else if (lives == 1)
+        }else if (lives == 1)
         {
             health.text = "<sprite=0>";
-        }
-        else if (lives == 0)
+        }else if (lives == 0)
         {
             health.text = "!!Game Over!!";
+            yield return new WaitForSeconds(5);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
         }
 
+    }
+
+    public IEnumerator winGame(){
+
+        press_e_interact.text = "The world is safed!";
+        _soundManager.playSound("winning");
+        yield return new WaitForSeconds(5);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1); 
     }
 
 public void pickup_item(string item)
@@ -102,8 +113,7 @@ public void pickup_item(string item)
         Debug.Log(_foundObjects[3]);
         if ((_foundObjects[0] == 0) && (_foundObjects[1] == 1) && (_foundObjects[2] == 2) && (_foundObjects[3] == 3))
         {
-            Debug.Log(_hasAllIngredience);
-            _hasAllIngredience = true;
+            _hasAllIngrediences = true;
         }
     }
 
@@ -111,7 +121,7 @@ public void pickup_item(string item)
     {
         Debug.Log("k_splash");
         ketchup_splash.text = "<sprite=0>";
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(3);
         ketchup_splash.text = "";
     }
 

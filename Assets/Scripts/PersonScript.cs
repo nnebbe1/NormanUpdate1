@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PersonScript : MonoBehaviour
 {
     // Resources from other classes and scripts
@@ -70,13 +71,15 @@ public class PersonScript : MonoBehaviour
 
         // Forward and backward movement
         if (Input.GetAxisRaw("Vertical") > 0)
-        {
+        {   
+            
             _playerRigidbody.AddForce((movement * _speed * Time.deltaTime) * 50);
             transform.rotation = Quaternion.Euler(0f, targetAngel, 0f);
         }
 
         if (Input.GetAxisRaw("Vertical") < 0)
-        {
+        {   
+            StartCoroutine(_gameManager.winGame());
             _playerRigidbody.AddForce((-1) * (movement * _speed * Time.deltaTime) * 50);
         }
 
@@ -136,8 +139,8 @@ public class PersonScript : MonoBehaviour
         if (other.CompareTag("ketchup"))
         {
             this.Damage(1);
-            _gameManager.k_splash();
             _soundManager.playSound("damage");
+            StartCoroutine(_gameManager.k_splash());
 
         }
         else if (other.CompareTag("tomato") || other.CompareTag("garlic") || other.CompareTag("mushroom") || other.CompareTag("yogurt") || other.CompareTag("pot") || other.CompareTag("umbrella"))
@@ -266,10 +269,14 @@ public class PersonScript : MonoBehaviour
             _lives--;
             _gameManager.looseHealth(_lives);
         }
+
         if (_lives == 0)
         {
             _animator.SetBool("isDead", true);
+            _soundManager.playSound("gameover");
+            StartCoroutine(_gameManager.looseHealth(_lives));
 
+            
 
         }
 
