@@ -51,9 +51,9 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator looseHealth(int lives)
     {
-        Debug.Log("looseHealthhh");
         if(lives == 2)
         {
+            Debug.Log("two lives left");
             health.text = "<sprite=0><sprite=1>";
         }else if (lives == 1)
         {

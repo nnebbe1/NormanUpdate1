@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -33,7 +34,7 @@ public class PersonScript : MonoBehaviour
     private int _lives = 3;
 
     private Vector3 _startPosition = new Vector3(-257.9f, 43.7f, -13.2f);
-
+    //private Vector3 _startPosition = new Vector3(-71.22f, 5.85f, 44.21f);
 
     //Variables used for the camera movement
 
@@ -261,13 +262,15 @@ public class PersonScript : MonoBehaviour
         if(type_enemy == 0)
         {
             _lives = 0;
-            _gameManager.looseHealth(_lives);
+            StartCoroutine(_gameManager.looseHealth(_lives));
         }
         // Ketchup uses lives consecutively 
-        else
+        else if (type_enemy == 1)
         {
             _lives--;
-            _gameManager.looseHealth(_lives);
+            Debug.Log(_lives);
+            _animator.SetInteger("isDamaged", _lives);
+            StartCoroutine(_gameManager.looseHealth(_lives));
         }
 
         if (_lives == 0)
