@@ -79,7 +79,6 @@ public class PersonScript : MonoBehaviour
 
         if (Input.GetAxisRaw("Vertical") < 0)
         {   
-            Damage(0);
             _playerRigidbody.AddForce((-1) * (movement * _speed * Time.deltaTime) * 50);
         }
 
