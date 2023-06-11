@@ -104,6 +104,10 @@ public class GameManager : MonoBehaviour
         onion_prompt.text = "Press 'E' to talk to the onion";
     }
 
+    public void onionTalk(){
+       onion_prompt.text = "Onions can't talk you dummy!"; 
+    }
+
     public void hide_onion_prompt()
     {
         onion_prompt.text = "";

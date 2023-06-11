@@ -4,9 +4,17 @@ using UnityEngine;
 
 public class PersonScript : MonoBehaviour
 {
-    // First thing we need is a reference to our character controller
-    //[SerializeField]
-    //private CharacterController _controller;
+    // Resources from other classes and scripts
+
+    [SerializeField]
+    private SoundManager _soundManager;
+
+    [SerializeField]
+    private GameManager _gameManager;
+    [SerializeField]
+    private Animator _animator; 
+
+    // Variables of the player
 
     [SerializeField]
     private float _speed = 600f;
@@ -14,219 +22,169 @@ public class PersonScript : MonoBehaviour
     private float _jumpingSpeed;
     [SerializeField]
     private float _extraGravity;
-
     [SerializeField]
-    private SoundManager soundManager;
-
-    [SerializeField]
-    private GameManager gameManager;
-
-
-    // for the Animation transitions
-    private Animator _animator; 
-
-
-
-    // -- time delay --
     private float _coolDownTime = 2f;
+    [SerializeField]
     private float _nextJumpTime = 0f;
-
-    //Making turns smoother 
     [SerializeField]
-    private float turnSmoothTime = 0.1f;
-
-    [SerializeField]
-    private Camera cam;
-
-    [SerializeField]
-    private Transform position_Cam;
-
-    [SerializeField]
-    private Transform position_Player;
-
-    private Vector3 direction = new Vector3(-257.9f, 43.7f, -13.2f);
-    private Rigidbody player_rigidbody;
+    private Transform _positionPlayer;
+    private Rigidbody _playerRigidbody;
+    private bool _hasUmbrella;
+    
+    private Vector3 _startPosition = new Vector3(-257.9f, 43.7f, -13.2f);
  
 
+    //Variables used for the camera movement
 
+    [SerializeField]
+    private float _turnSmoothTime = 0.1f;
+    private Camera _cam;
+
+    [SerializeField]
+    private Transform _positionCam;
+
+    // Player Set up
     void Start()
     {
-        transform.position = direction;
-        player_rigidbody = GetComponent<Rigidbody>();
+        transform.position = _startPosition;
+        _playerRigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
-        hasUmbrella = false;
+        _hasUmbrella = false;
     }
 
+    //Handels moves, airresistance jumps and animations of the player according to input
     void FixedUpdate()
     {
-
-        Vector3 movement = (position_Player.position - position_Cam.position) / 30;
+        Vector3 movement = (_positionPlayer.position - _positionCam.position) / 30;
         movement.y = 0;
-        Vector3 movement_right = new Vector3(-movement.z, 0f, movement.x);
-        Vector3 movement_left = new Vector3(movement.z, 0f, -movement.x);
+        Vector3 movementRight = new Vector3(-movement.z, 0f, movement.x);
+        Vector3 movementLeft = new Vector3(movement.z, 0f, -movement.x);
 
         float targetAngel = Mathf.Atan2(movement.x, movement.z) * Mathf.Rad2Deg;
-        player_rigidbody.AddForce(0,-_extraGravity,0);
-        
-
-        //updated direction vector
-        //Vector3 movementRotated = Quaternion.AngleAxis(cam.transform.eulerAngles.y, Vector3.up) * movement;
-
-        //adjust rotation of player
+        _playerRigidbody.AddForce(0,-_extraGravity,0);
+    
+        // Forward and backward movement
         if (Input.GetAxisRaw("Vertical") > 0)
         {
-            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movementRotated.normalized), 0.1f);
-            player_rigidbody.AddForce((movement * _speed * Time.deltaTime)*50);
+            _playerRigidbody.AddForce((movement * _speed * Time.deltaTime)*50);
             transform.rotation = Quaternion.Euler(0f, targetAngel, 0f);
         }
         
         if (Input.GetAxisRaw("Vertical") < 0)
         {
-            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movementRotated.normalized), 0.1f);
-            player_rigidbody.AddForce((-1)*(movement * _speed * Time.deltaTime)*50);
+            _playerRigidbody.AddForce((-1)*(movement * _speed * Time.deltaTime)*50);
         }
 
+        // Left and Right movement
         if (Input.GetAxisRaw("Horizontal") < 0)
         {
-            
-            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movementRotated.normalized), 0.1f);
-            player_rigidbody.AddForce((movement_right * _speed * Time.deltaTime)*50);
+            _playerRigidbody.AddForce((movementRight * _speed * Time.deltaTime)*50);
         }
 
         if (Input.GetAxisRaw("Horizontal") > 0)
         {
-            
-            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movementRotated.normalized), 0.1f);
-            player_rigidbody.AddForce((movement_left * _speed * Time.deltaTime)*50);
+            _playerRigidbody.AddForce((movementLeft * _speed * Time.deltaTime)*50);
 
         }
+        //Jumping and jump animation
         if (Input.GetKey("space") && _nextJumpTime < Time.time)
         {
-            player_rigidbody.velocity = new Vector3(0f, _jumpingSpeed, 0f);
-            Debug.Log(player_rigidbody.velocity);
+            _playerRigidbody.velocity = new Vector3(0f, _jumpingSpeed, 0f);
             _nextJumpTime = Time.time + _coolDownTime;
-
             _animator.SetBool("toJump", true);
         }
         if(_nextJumpTime <  Time.time){
-
             _animator.SetBool("toJump", false);
         }
 
-        
+        //Simulate air resistance, slowing down the player
+        var direction = -_playerRigidbody.velocity.normalized;
+        var forceAmount = (_playerRigidbody.velocity.magnitude);
+        var airResistance = new Vector3(direction.x * forceAmount, 0f, direction.z * forceAmount);
+        _playerRigidbody.AddForce(airResistance);
+    }
 
-        // this code simulates air resistance: slowing down when no input is pressed
-        var direction = -player_rigidbody.velocity.normalized;
-        var forceAmount = (player_rigidbody.velocity.magnitude);
-        var air_resistance = new Vector3(direction.x * forceAmount, 0f, direction.z * forceAmount);
-        player_rigidbody.AddForce(air_resistance);
-        }
 
-     private void OnTriggerEnter(Collider other)
+    // Interactions between player an interactables when collision occurs
+    // Onion, ingrediences, umbrella, rain and ketchup
+    // Show UI prompts, loose health, play sounds
+    private void OnTriggerEnter(Collider other)
     {
-        
         if (other.CompareTag("onion"))
         {
-            gameManager.show_onion_prompt();
+            _gameManager.show_onion_prompt();
 
         }
 
         if (other.CompareTag("rain"))
         {
-            gameManager.looseHealth();
-            soundManager.playSound("rain");
+            _gameManager.looseHealth();
+            _soundManager.playSound("rain");
 
         }
 
         if (other.CompareTag("ketchup"))
         {
-            gameManager.looseHealth();
-            gameManager.k_splash();
-            soundManager.playSound("damage");
+            _gameManager.looseHealth();
+            _gameManager.k_splash();
+            _soundManager.playSound("damage");
 
-            //SoundManager damage sound
-        }
-
-        if (other.CompareTag("garlic"))
+        }else if (other.CompareTag("tomato") || other.CompareTag("garlic") || other.CompareTag("mushroom") || other.CompareTag("yogurt") || other.CompareTag("pot") || other.CompareTag("umbrella"))
         {
-            gameManager.show_press_e_prompt();
-            Debug.Log("garlic");
-        }
-
-        if (other.CompareTag("mushroom"))
-        {
-            gameManager.show_press_e_prompt();
-        }
-
-        if (other.CompareTag("yogurt"))
-        {
-            gameManager.show_press_e_prompt();
-        }
-
-        if (other.CompareTag("tomato"))
-        {
-            gameManager.show_press_e_prompt();
-        }
-
-        if (other.CompareTag("pot"))
-        {
-            gameManager.show_press_e_prompt();
-        }
-
-        if (other.CompareTag("umbrella"))
-        {
-            gameManager.show_press_e_prompt();
+            _gameManager.show_press_e_prompt();
         }
 
     }
 
+    // Interactions between player an interactables during collision
+    // Pick up of ingrediences, talk to onion, cook at cooking pot
     private void OnTriggerStay(Collider other){
         
         if (other.CompareTag("onion"))
         {
             if (Input.GetKey(KeyCode.E)){
-                soundManager.playSound("onion");
+                _gameManager.onionTalk();
             }
 
         }
          if (other.CompareTag("garlic"))
         {
             if (Input.GetKey(KeyCode.E)){
-                gameManager.pickup_item(other.tag);
-                soundManager.playSound("collect");
+                _gameManager.pickup_item(other.tag);
+                _soundManager.playSound("collect");
             }
         }
 
         if (other.CompareTag("mushroom"))
         {
            if (Input.GetKey(KeyCode.E)){
-                gameManager.pickup_item(other.tag);
-                soundManager.playSound("collect");
+                _gameManager.pickup_item(other.tag);
+                _soundManager.playSound("collect");
             } 
         }
 
         if (other.CompareTag("yogurt"))
         {
            if (Input.GetKey(KeyCode.E)){
-                gameManager.pickup_item(other.tag);
-                soundManager.playSound("collect");
+                _gameManager.pickup_item(other.tag);
+                _soundManager.playSound("collect");
             } 
         }
 
         if (other.CompareTag("tomato"))
         {
             if (Input.GetKey(KeyCode.E)){
-                gameManager.pickup_item(other.tag);
-                soundManager.playSound("collect");
+                _gameManager.pickup_item(other.tag);
+                _soundManager.playSound("collect");
             }
         }
 
         if (other.CompareTag("umbrella"))
         {
             if (Input.GetKey(KeyCode.E)){
-                gameManager.pickup_item(other.tag);
-                soundManager.playSound("collect");
-                hasUmbrella = true;
+                _gameManager.pickup_item(other.tag);
+                _soundManager.playSound("collect");
+                _hasUmbrella = true;
             }
         }
 
@@ -240,19 +198,22 @@ public class PersonScript : MonoBehaviour
 
     }
 
+    // Interactions between player an interactables when collision ends
+    // Hide UI prompts
     private void OnTriggerExit(Collider other){
 
         if (other.CompareTag("onion"))
         {
-            gameManager.hide_onion_prompt();
-        }else if (other.CompareTag("tomato") || other.CompareTag("garlic") || other.CompareTag("mushroom") || other.CompareTag("yogurt") || other.CompareTag("pot"))
+            _gameManager.hide_onion_prompt();
+        }else if (other.CompareTag("tomato") || other.CompareTag("garlic") || other.CompareTag("mushroom") || other.CompareTag("yogurt") || other.CompareTag("pot") || other.CompareTag("umbrella"))
         {
-            gameManager.hide_press_e_prompt();
+            _gameManager.hide_press_e_prompt();
             
         }else if (other.CompareTag("rain")){
-            soundManager.playSound("background");
+            _soundManager.playSound("background");
 
         }
 
     }
 }
+

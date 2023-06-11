@@ -17,6 +17,8 @@ public class SoundManager : MonoBehaviour
 
     [SerializeField]
     private AudioClip jumpClip;
+    [SerializeField]
+    private AudioClip onionClip;
 
     [SerializeField]
     private AudioClip rainClip;
@@ -45,6 +47,10 @@ public class SoundManager : MonoBehaviour
         else if (clipName == "collect")
         {
             clipsSource.PlayOneShot(collectClip);
+        }
+        else if (clipName == "onion")
+        {
+            clipsSource.PlayOneShot(onionClip);
         }
         else if (clipName == "rain")
         {
