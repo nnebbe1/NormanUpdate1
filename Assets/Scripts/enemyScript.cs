@@ -15,9 +15,9 @@ public class enemyScript : MonoBehaviour
         //UnityEngine.Debug.Log(other.tag);
         if (other.CompareTag("Player"))
         {
-            UnityEngine.Debug.Log("player-rain-collision");
-            Destroy(this.gameObject);
-            other.GetComponent<PersonScript>().Damage(0);
+            //UnityEngine.Debug.Log("player-rain-collision");
+            //Destroy(this.gameObject);
+            //other.GetComponent<PersonScript>().Damage(0);
 
         }
 

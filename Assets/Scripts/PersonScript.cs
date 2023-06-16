@@ -141,6 +141,7 @@ public class PersonScript : MonoBehaviour
             this.Damage(1);
             _soundManager.playSound("damage");
             StartCoroutine(_gameManager.k_splash());
+            Destroy(other.gameObject);
 
         }
         else if (other.CompareTag("tomato") || other.CompareTag("garlic") || other.CompareTag("mushroom") || other.CompareTag("yogurt") || other.CompareTag("pot") || other.CompareTag("umbrella"))
