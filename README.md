@@ -74,7 +74,9 @@ One brave bird soldier simply does not accept this new reality. Determined to br
 - It then gets destroyed 
 
 **Ketchup Army**
-- they randomly move around within a certain area **(NORMAN NEEDS TO ADD EXPLANATION)**
+- Group of ketchup game objects having a NavMeshAgent component
+- Beneath them is a baked navmesh on which they can move around
+- Script that generates random movement within a certain area on the navmesh
 
 **User Interface**
 - In the top-left corner is a life counter in the form of red hearts, that turn grey when losing a life. 
@@ -83,7 +85,9 @@ One brave bird soldier simply does not accept this new reality. Determined to br
 - when getting hit by a ketchup landmine there is a red stain on the camera for a short period of time
 
 **Sound effects**
-**(NORMAN NEEDS TO ADD EXPLANATION)**
+- SoundManager class that is able to play various sounds
+- contains Soundsources and Soundclips for the background and for the varius sound snippets
+- There are sounds for background, rain, getting damage, jumping, picking up stuff, loosing the game, winning the game, and the introduction talk 
 
 **Scene switching** 
 - there are two different scenes
