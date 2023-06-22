@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
+
+    // Variables of the sound manager class
+    // Soundsources and Soundclips get initialized
     [SerializeField]
     private AudioSource clipsSource;
     [SerializeField]
@@ -32,11 +35,14 @@ public class SoundManager : MonoBehaviour
 
     void Start()
     {
+        //Plays the default background sound
         backgroundSource.clip = backgroundClip;
         backgroundSource.loop = true;
         backgroundSource.Play();
 
     }
+
+    //Can be called from anywhere to play the needed sound snipped
     public void playSound(string clipName)
     {
 

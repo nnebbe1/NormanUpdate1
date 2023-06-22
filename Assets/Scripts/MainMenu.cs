@@ -4,21 +4,16 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {   
-    public AudioSource source;
-    public AudioClip clip;
 
-    void Update(){
+    // Handels button clicks
 
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            source.PlayOneShot(clip);
-        }
-    }
+    // Changes the scene to game scene
     public void PlayGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
+    // Quits the game
     public void QuitGame()
     {
         Application.Quit();

@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-public class PersonScript : MonoBehaviour
+public class PlayerManager : MonoBehaviour
 {
     // Resources from other classes and scripts
 
@@ -34,7 +34,7 @@ public class PersonScript : MonoBehaviour
     private int _lives = 3;
 
     private Vector3 _startPosition = new Vector3(-257.9f, 43.7f, -13.2f);
-    //private Vector3 _startPosition = new Vector3(-71.22f, 5.85f, 44.21f);
+    
 
     //Variables used for the camera movement
 
@@ -59,15 +59,18 @@ public class PersonScript : MonoBehaviour
         _hasUmbrella = false;
     }
 
-    //Handels moves, airresistance jumps and animations of the player according to input
+    // Handels moves, airresistance jumps and animations of the player according to input
     void FixedUpdate()
-    {
+    {   
+        // Calculate movement directions and movement angel based on current position
         Vector3 movement = (_positionPlayer.position - _positionCam.position) / 30;
         movement.y = 0;
         Vector3 movementRight = new Vector3(-movement.z, 0f, movement.x);
         Vector3 movementLeft = new Vector3(movement.z, 0f, -movement.x);
 
         float targetAngel = Mathf.Atan2(movement.x, movement.z) * Mathf.Rad2Deg;
+
+        // Adds "extra" gravity to make the game less floaty and more precise
         _playerRigidbody.AddForce(0, -_extraGravity, 0);
 
         // Forward and backward movement
@@ -94,7 +97,7 @@ public class PersonScript : MonoBehaviour
             _playerRigidbody.AddForce((movementLeft * _speed * Time.deltaTime) * 50);
 
         }
-        //Jumping and jump animation
+        // Jumping and jump animation
         if (Input.GetKey("space") && _nextJumpTime < Time.time)
         {
             _playerRigidbody.velocity = new Vector3(0f, _jumpingSpeed, 0f);
@@ -106,11 +109,18 @@ public class PersonScript : MonoBehaviour
             _animator.SetBool("toJump", false);
         }
 
-        //Simulate air resistance, slowing down the player
+        // Simulate air resistance, slowing down the player
         var direction = -_playerRigidbody.velocity.normalized;
         var forceAmount = (_playerRigidbody.velocity.magnitude);
         var airResistance = new Vector3(direction.x * forceAmount, 0f, direction.z * forceAmount);
         _playerRigidbody.AddForce(airResistance);
+
+        // If the player manages to go out of the playing area they will respawn at the beginning
+        if (_positionPlayer.position.y < -100){
+           _positionPlayer.position = _startPosition;
+        }
+
+
     }
 
 
@@ -124,18 +134,18 @@ public class PersonScript : MonoBehaviour
             _gameManager.show_onion_prompt();
 
         }
-
+        // player gets killed by mayo-rain without umbrella
         if (other.CompareTag("rain"))
         {
             _soundManager.playSound("rain");
-            // player gets killed by mayo-rain without umbrella
-            if (!_hasUmbrella)
+            
+            if (_hasUmbrella == false)
             {
                 this.Damage(0);
             }
 
         }
-
+        // Player gets 1 damage and the ketchup object gets destroyed
         if (other.CompareTag("ketchup"))
         {
             this.Damage(1);
@@ -257,9 +267,11 @@ public class PersonScript : MonoBehaviour
 
     }
 
+    // Function gets called with the enemy type when collision with enemy occures
+    // Handels the life-loosing
     public void Damage(int type_enemy)
     {
-        // mayo-rain leads to death right away
+        // Mayo-rain leads to death right away
         if(type_enemy == 0)
         {
             _lives = 0;

@@ -4,14 +4,16 @@ using UnityEngine;
 using UnityEngine.AI; 
 
 
-public class MovementKetchup : MonoBehaviour //don't forget to change the script name if you haven't
+public class MovementKetchup : MonoBehaviour
 {
     public NavMeshAgent agent;
     public float radius_of_sphere;
 
-    public Transform centrePoint; //centre of the area the agent wants to move around in
-    //instead of centrePoint you can set it as the transform of the agent if you don't care about a specific area
+    // Centre of the area the ketchup wants to move around in
+    // Get set as the transform of the ketchup so the ketchup moves around his starting point
+    public Transform centrePoint; 
 
+    // Get the NavMeshAgent and the assigned center point
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -21,26 +23,30 @@ public class MovementKetchup : MonoBehaviour //don't forget to change the script
     
     void Update()
     {
-        if(agent.remainingDistance <= agent.stoppingDistance) //done with path
+        // Checks if done with current path
+        if(agent.remainingDistance <= agent.stoppingDistance) 
         {
             Vector3 point;
-            if (RandomPoint(centrePoint.position, radius_of_sphere, out point)) //pass in our centre point and radius of area
+            // Pass in our centre point and radius of area
+            // If a valid point is gotten out, set this as new destination of the NavMeshAgent
+            if (RandomPoint(centrePoint.position, radius_of_sphere, out point)) 
             {
-                Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
                 agent.SetDestination(point);
             }
         }
 
     }
+
+
+
+    // Gets a random point in the determined walking sphere if possible
+    // Needs the center point, the radius and a result vector to give out
     bool RandomPoint(Vector3 center, float radius_of_sphere, out Vector3 result)
     {
-
-        Vector3 randomPoint = center + Random.insideUnitSphere * radius_of_sphere; //random point in a sphere 
+        Vector3 randomPoint = center + Random.insideUnitSphere * radius_of_sphere; 
         NavMeshHit hit;
-        if (NavMesh.SamplePosition(randomPoint, out hit, 50f, NavMesh.AllAreas)) //documentation: https://docs.unity3d.com/ScriptReference/AI.NavMesh.SamplePosition.html
+        if (NavMesh.SamplePosition(randomPoint, out hit, 50f, NavMesh.AllAreas))
         { 
-            //the 1.0f is the max distance from the random point to a point on the navmesh, might want to increase if range is big
-            //or add a for loop like in the documentation
             result = hit.position;
             return true;
         }
