@@ -50,6 +50,7 @@ One brave bird soldier simply does not accept this new reality. Determined to br
 **Player**
 - moves in all directions of 3D space (including jumping) 
 - Always aligns rotation with camera direction, which is set by the mouse
+- player can move within stone walls - if it jumps over stonewalls (e.g. from a cloud) it reappears in the middle of the island
 
 **Animations**
 - player transitions between different animations: 
