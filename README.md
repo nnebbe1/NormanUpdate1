@@ -3,10 +3,10 @@
 ## Stating issues you've coped with:
 - the main issue was working with GitHub. There were major merging conflicts we could not find a way around, even when only working on specific scenes/ scripts in parallel. We had to mainly collaborate and update our code outside of GitHub, e.g. sending scripts via google drive or updating the scences of the other Person manually. 
 - In the beginning, we had some issues with arbitrary movements of the Player we seemingly didn't have an influence on. It took us quite a while until realizing that our floor had some messed up Capsule colliders when Box-colliders would be the right choice. 
-- Another tricky point was getting the player to move toward the camera direction. In the end, we resolved that issue **with a third-person Camera***.
+- Another tricky point was getting the player to move toward the camera direction.
 - More generally, we found Unity quite tricky to work with. Throughout the project, when running into errors, it was often quite hard to identify the source of the issue. When the issue was due to script errors, debug messages helped to identify the mistakes. However, especially errors due to mistakes in the Unity editor were hard to identify. 
 
-## Hints on how to play:
+## Hints on how to play + how game should behave:
 
 ### Game story/background:
 
