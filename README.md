@@ -87,7 +87,7 @@ One brave bird soldier simply does not accept this new reality. Determined to br
 **Sound effects**
 - SoundManager class that is able to play various sounds
 - contains Soundsources and Soundclips for the background and for the varius sound snippets
-- There are sounds for background, rain, getting damage, jumping, picking up stuff, loosing the game, winning the game, and the introduction talk 
+- There are sounds for background music, rain, getting damage, jumping, picking up stuff, loosing the game, winning the game, and the introduction talk 
 
 **Scene switching** 
 - there are two different scenes
