@@ -103,6 +103,7 @@ public class PlayerManager : MonoBehaviour
             _playerRigidbody.velocity = new Vector3(0f, _jumpingSpeed, 0f);
             _nextJumpTime = Time.time + _coolDownTime;
             _animator.SetBool("toJump", true);
+            _soundManager.playSound("jump");
         }
         if (_nextJumpTime < Time.time)
         {
