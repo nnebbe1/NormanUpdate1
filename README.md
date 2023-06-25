@@ -3,10 +3,10 @@
 ## Stating issues you've coped with:
 - the main issue was working with GitHub. There were major merging conflicts we could not find a way around, even when only working on specific scenes/ scripts in parallel. We had to mainly collaborate and update our code outside of GitHub, e.g. sending scripts via google drive or updating the scences of the other Person manually. 
 - In the beginning, we had some issues with arbitrary movements of the Player we seemingly didn't have an influence on. It took us quite a while until realizing that our floor had some messed up Capsule colliders when Box-colliders would be the right choice. 
-- Another tricky point was getting the player to move toward the camera direction. In the end, we resolved that issue **with a third-person Camera***.
+- Another tricky point was getting the player to move toward the camera direction.
 - More generally, we found Unity quite tricky to work with. Throughout the project, when running into errors, it was often quite hard to identify the source of the issue. When the issue was due to script errors, debug messages helped to identify the mistakes. However, especially errors due to mistakes in the Unity editor were hard to identify. 
 
-## Hints on how to play:
+## Hints on how to play + how game should behave:
 
 ### Game story/background:
 
@@ -74,7 +74,9 @@ One brave bird soldier simply does not accept this new reality. Determined to br
 - It then gets destroyed 
 
 **Ketchup Army**
-- they randomly move around within a certain area **(NORMAN NEEDS TO ADD EXPLANATION)**
+- Group of ketchup game objects having a NavMeshAgent component
+- Beneath them is a baked navmesh on which they can move around
+- Script that generates random movement within a certain area on the navmesh
 
 **User Interface**
 - In the top-left corner is a life counter in the form of red hearts, that turn grey when losing a life. 
@@ -83,7 +85,9 @@ One brave bird soldier simply does not accept this new reality. Determined to br
 - when getting hit by a ketchup landmine there is a red stain on the camera for a short period of time
 
 **Sound effects**
-**(NORMAN NEEDS TO ADD EXPLANATION)**
+- SoundManager class that is able to play various sounds
+- contains Soundsources and Soundclips for the background and for the varius sound snippets
+- There are sounds for background music, rain, getting damage, jumping, picking up stuff, loosing the game, winning the game, and the introduction talk 
 
 **Scene switching** 
 - there are two different scenes
