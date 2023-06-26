@@ -39,7 +39,6 @@ public class PlayerManager : MonoBehaviour
     //Variables used for the camera movement
 
     [SerializeField]
-    private float _turnSmoothTime = 0.1f;
     private Camera _cam;
 
     [SerializeField]
