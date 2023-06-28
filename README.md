@@ -1,8 +1,9 @@
 # Project Documentation
 
 ## Stating issues you've coped with:
-- the main issue was working with GitHub. There were major merging conflicts we could not find a way around, even when only working on specific scenes/ scripts in parallel. We had to mainly collaborate and update our code outside of GitHub, e.g. sending scripts via google drive or updating the scences of the other Person manually. 
-- In the beginning, we had some issues with arbitrary movements of the Player we seemingly didn't have an influence on. It took us quite a while until realizing that our floor had some messed up Capsule colliders when Box-colliders would be the right choice. 
+- We had problems installing the required Unity version and thought it would be easier to convert it into the right one once it is finished. However, the issue was that you can only convert the finished version into a newer Unity version and not back to an older one. We realized that too late and thus have the game in a different unity version, namely: **2021.3.26f1** we are very sorry for the inconvenience! 
+- the main issue was working with GitHub. There were major merging conflicts we could not find a way around, even when only working on specific scenes/ scripts in parallel. We had to mainly collaborate and update our code outside of GitHub, e.g. sending scripts via google drive or updating the scenes of the other Person manually. 
+- In the beginning, we had some issues with the arbitrary movements of the Player we seemingly didn't have an influence on. It took us quite a while until realizing that our floor had some messed up Capsule colliders when Box-colliders would be the right choice. 
 - Another tricky point was getting the player to move toward the camera direction.
 - More generally, we found Unity quite tricky to work with. Throughout the project, when running into errors, it was often quite hard to identify the source of the issue. When the issue was due to script errors, debug messages helped to identify the mistakes. However, especially errors due to mistakes in the Unity editor were hard to identify. 
 
@@ -23,6 +24,7 @@ One brave bird soldier simply does not accept this new reality. Determined to br
 - The player can jump when pressing the "spacebar".
 - It can move sideways or backward, as the player doesn't rotate when using a or d. For rotating the player, the mouse has to be used. 
 - You can walk on almost all of the terrain (all that is within stone walls), including the clouds.
+- when jumping outside of the stonewalls into the off, player gets respawned at start position
 
 ### Collecting Items
 - Items can be picked up via pressing "e" in the area of the Item (Hints are shown throughout the game). 
@@ -31,7 +33,7 @@ One brave bird soldier simply does not accept this new reality. Determined to br
 - The tomato can be collected by walking into the labyrinth. In the labyrinth, the umbrella can also be collected (not an ingredient but useful later on) 
 - The mushroom can be collected by jumping on the small clouds underneath the big rain cloud. Careful! the acidic mayo-rain will kill the player if they don't have an umbrella with them. That means the order of collection matters and the Person playing the game has to find that out by trial and error. 
 - The yogurt can be collected by managing your way through the ketchup army. Careful! the ketchup bottles are enemies, if you touch them you lose a life.
-- the garlic can be picked up right away
+- the garlic can be picked up right away (there are signs around it indicating that the area is under construction, as a joke) 
 
 
 ### Enemies
@@ -59,10 +61,10 @@ One brave bird soldier simply does not accept this new reality. Determined to br
  3. "dead" - when game over
  4. "spinning" - when game is won
 
-- players eyes transition between different animations
+- player's eyes transition between different animations
 1. "happy" - when all three lives are left
 2. "sweating" - when one life is lost
-3. "trauma" - when to lives are lost
+3. "trauma" - when two lives are lost
 4. "dead" - when no life is left
 
 **Rain**
@@ -87,7 +89,7 @@ One brave bird soldier simply does not accept this new reality. Determined to br
 **Sound effects**
 - SoundManager class that is able to play various sounds
 - contains Soundsources and Soundclips for the background and for the varius sound snippets
-- There are sounds for background music, rain, getting damage, jumping, picking up stuff, loosing the game, winning the game, and the introduction talk 
+- There are sounds for background music, rain, getting damage, jumping, picking up stuff, losing the game, winning the game, and the introduction talk 
 
 **Scene switching** 
 - there are two different scenes
